@@ -156,9 +156,12 @@ def calc_stirrup(stirrup: StirrupData, b: float, h: float,
     cover_data = COVER.get(exposure.lower(), COVER["indoor"])
     c = cover_data["stirrup"]
     perimeter = 2 * ((b - 2*c) + (h - 2*c))
-    hook_len   = max(6 * (STEEL_WEIGHT[size] ** 0.5), 0.10) * 2  # estimate hook
+    dia_map = {"DB6":0.006,"RB6":0.006,"DB9":0.009,"RB9":0.009,
+               "DB12":0.012,"RB12":0.012,"DB16":0.016,"RB16":0.016,
+               "DB20":0.020,"RB20":0.020,"DB25":0.025,"RB25":0.025,
+               "DB28":0.028,"RB28":0.028,"DB32":0.032,"RB32":0.032}
+    hook_len  = 2 * 6 * dia_map.get(size, 0.010)
     stirrup_L  = round(perimeter + hook_len, 4)
-
     n_stirrups = math.ceil(L / stirrup.spacing) + 1
     wt_per_m   = STEEL_WEIGHT[size]
     waste      = STEEL_WASTE.get(size, 0.15)
